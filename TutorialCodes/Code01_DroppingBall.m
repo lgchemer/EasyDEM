@@ -1,7 +1,10 @@
 %--------------------------------------------
+% Developer: Seung Jae Lee
+% Institution: Florida Interantional University
+% Date: 2/8/2021
 % Abstract: A super simple DEM code in 2D
+%           This is the very first code to simulate dropping a ball
 % Unit: cm, g, N
-%
 %--------------------------------------------
 
 clc

@@ -1,14 +1,16 @@
 %--------------------------------------------
+% Developer: Seung Jae Lee
+% Institution: Florida Interantional University
+% Date: 2/8/2021
 % Abstract: A super simple DEM code in 2D
+%           This is the very first code to simulate a bouncing ball
 % Unit: cm, g, N
-%
 %--------------------------------------------
 
 clc
 clear
 close all
 
-%--------------------------------------------
 % Global variables
 %--------------------------------------------
 grav_acc        = -981;          % 981 cm/s^2
