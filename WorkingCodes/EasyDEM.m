@@ -15,9 +15,8 @@ close all
 grav_acc        = -981; % 981 cm/s^2
 
 % user-input
-sim_duration    = 0.2;  % unit: second 
-dt              = 2e-4; % unit: second
-sim_steps       = sim_duration/dt;
+sim_duration    = 0.3;  % unit: second 
+stiffness       = 1.3e4;% unit: N/m
 density         = 0.1;  % 0.1 g/cc 
 % -------------------------------
 % Define balls
@@ -29,11 +28,16 @@ b(1).r  = 1;
 b(1).m  = 4/3*pi*(b(1).r)^3*density;
 b(1).cx = 5;    % center x
 b(1).cz = 3;    % center z
-b(1).vx = 0;    % velocity x
+b(1).vx = 10;    % velocity x
 b(1).vz = 0;    % velocity z
 b(1).fx = 0;    % force x
 b(1).fz = 0;    % force z
 
+% compute the simulation step
+min_r   =       min(b(:).r);    % minimum ball size (radius)
+mass_min=       4/3*pi*min_r*min_r*min_r*density;
+dt      =       0.2*sqrt(mass_min/stiffness); % unit: second
+sim_steps       = round(sim_duration/dt);
 % for theoretical solution
 time = dt*[1:sim_steps];
 theoretical_vz = b(1).vz + grav_acc*time;
@@ -59,7 +63,7 @@ axis equal
 % -------------------------------
 % Time integration (simulation)
 % -------------------------------
-array_vz = zeros(1,sim_steps);
+% array_vz = zeros(1,sim_steps);
 array_cz = zeros(1,sim_steps);
 
 for i = 1:sim_steps
@@ -69,6 +73,17 @@ for i = 1:sim_steps
     % global force update
     b(1).fz = b(1).m * grav_acc;
 
+    % CONTACT FORCE update  
+    % Check boundaries 
+    % Assumption: the boundary is rectangle. If not rectangle, a more
+    %             sophisticated method needs to be implemented.    
+    urn = (b(1).cz - b(1).r) - min(bndZ);
+    if urn < 0 
+        cnt_force = stiffness * urn;
+        b(1).fz = b(1).fz - cnt_force;
+    end
+    
+    
     %--------------------------------------------
     % particle motion update
     %--------------------------------------------
@@ -76,7 +91,7 @@ for i = 1:sim_steps
     b(1).vz     = b(1).vz + b(1).fz/b(1).m*dt;
     if (i==1) b(1).vz = b(1).vz/2; end % central time integration
     b(1).cz     = b(1).cz + b(1).vz*dt;
-    array_vz(i) = b(1).vz;
+%     array_vz(i) = b(1).vz;
     array_cz(i) = b(1).cz;
     
     %--------------------------------------------
@@ -89,28 +104,25 @@ end
 % -------------------------------------
 % Compare with the theoretical solution
 % -------------------------------------
-% velocity
-figure
-subplot(2,1,1)
-hold on 
-grid on 
-plot(time,theoretical_vz,'r-')
-plot(time,array_vz,'b--')
-xlabel('Time (sec)')
-ylabel('Velocity (cm/sec)')
-legend('Theoretical','Simulation')
+% % velocity
+% figure
+% subplot(2,1,1)
+% hold on 
+% grid on 
+% plot(time,theoretical_vz,'r-')
+% plot(time,array_vz,'b--')
+% xlabel('Time (sec)')
+% ylabel('Velocity (cm/sec)')
+% legend('Theoretical','Simulation')
 
 % displacement
-subplot(2,1,2)
-hold on 
+figure
 grid on 
-plot(time,theoretical_cz,'r-')
 plot(time,array_cz,'b--')
 xlabel('Time (sec)')
-ylabel('Displacement (cm/sec)')
-legend('Theoretical','Simulation')
+ylabel('Displacement (cm)')
 
-sgtitle('Comparison with the theoretical solutions')
+
 
 
 
