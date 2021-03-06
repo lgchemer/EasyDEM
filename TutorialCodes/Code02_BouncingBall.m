@@ -1,24 +1,22 @@
 %--------------------------------------------
-% Developer: Seung Jae Lee
-% Institution: Florida Interantional University
-% Date: 2/8/2021
 % Abstract: A super simple DEM code in 2D
-%           This is the very first code to simulate a bouncing ball
 % Unit: cm, g, N
+%
 %--------------------------------------------
 
 clc
 clear
 close all
 
+%--------------------------------------------
 % Global variables
 %--------------------------------------------
 grav_acc        = -981;          % 981 cm/s^2
 
 % user-input
 sim_duration    = 0.5;         % unit: second
-stiffness       = 1.3e4;        % 1.3e6 N/m = (kg*m/s^2)/m =(kg*cm/s^2)/cm 
-density         = 0.1;          % 0.1 g/cm^3 
+stiffness       = 1.3e5;       % 1.3e5 N/m = (kg*m/s^2)/m =(kg*cm/s^2)/cm 
+density         = 0.1;         % 0.1 g/cm^3 
 %--------------------------------------------
 % Define balls (particles)
 %--------------------------------------------
@@ -39,7 +37,7 @@ b(1).fz = 0;    % force z
 
 % compute the simulation step
 min_r   = min(b(:).r);    % minimum ball size (radius)
-dt      = 0.05 * sqrt(4/3*pi*min_r*min_r*min_r*density/stiffness); % time step size (unit: seconds)
+dt      = 0.2 * sqrt(4/3*pi*min_r*min_r*min_r*density/stiffness); % time step size (unit: seconds)
 sim_steps = ceil(sim_duration / dt);
 
 %--------------------------------------------

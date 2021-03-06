@@ -118,7 +118,7 @@ end
 % displacement
 figure
 grid on 
-plot(time,array_cz,'b--')
+plot(time,array_cz,'b-')
 xlabel('Time (sec)')
 ylabel('Displacement (cm)')
 
