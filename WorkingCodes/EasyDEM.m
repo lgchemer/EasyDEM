@@ -16,7 +16,7 @@ grav_acc        = -981; % 981 cm/s^2
 
 % user-input
 sim_duration    = 0.3;  % unit: second 
-stiffness       = 1.3e4;% unit: N/m
+stiffness       = 1.3e5;% unit: N/m
 density         = 0.1;  % 0.1 g/cc 
 % -------------------------------
 % Define balls
@@ -50,6 +50,7 @@ theoretical_cz = b(1).cz + b(1).vz*time + 0.5*grav_acc*time.^2;
 bndX = [0,0,10,10];
 bndZ = [0,10,10,0];
 patch(bndX,bndZ,'g','FaceAlpha',0.5);
+axis ([-2 12 -2 12])
 axis equal 
 grid on
 hold on
@@ -91,7 +92,6 @@ for i = 1:sim_steps
     b(1).vz     = b(1).vz + b(1).fz/b(1).m*dt;
     if (i==1) b(1).vz = b(1).vz/2; end % central time integration
     b(1).cz     = b(1).cz + b(1).vz*dt;
-%     array_vz(i) = b(1).vz;
     array_cz(i) = b(1).cz;
     
     %--------------------------------------------
@@ -101,19 +101,9 @@ for i = 1:sim_steps
     drawnow
 end
 
-% -------------------------------------
-% Compare with the theoretical solution
-% -------------------------------------
-% % velocity
-% figure
-% subplot(2,1,1)
-% hold on 
-% grid on 
-% plot(time,theoretical_vz,'r-')
-% plot(time,array_vz,'b--')
-% xlabel('Time (sec)')
-% ylabel('Velocity (cm/sec)')
-% legend('Theoretical','Simulation')
+%--------------------------------------------
+% Plot displacement history
+%--------------------------------------------
 
 % displacement
 figure

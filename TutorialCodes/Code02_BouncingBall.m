@@ -1,7 +1,10 @@
 %--------------------------------------------
+% Developer: Seung Jae Lee
+% Institution: Florida Interantional University
+% Date: 2/8/2021
 % Abstract: A super simple DEM code in 2D
+%           This is the very first code to simulate dropping a ball
 % Unit: cm, g, N
-%
 %--------------------------------------------
 
 clc
@@ -14,7 +17,7 @@ close all
 grav_acc        = -981;          % 981 cm/s^2
 
 % user-input
-sim_duration    = 0.5;         % unit: second
+sim_duration    = 0.3;         % unit: second
 stiffness       = 1.3e5;       % 1.3e5 N/m = (kg*m/s^2)/m =(kg*cm/s^2)/cm 
 density         = 0.1;         % 0.1 g/cm^3 
 %--------------------------------------------
@@ -26,7 +29,7 @@ b = struct();
 b(1).r  = 1;
 b(1).m  = 4/3*pi*b(1).r*b(1).r*b(1).r*density;
 b(1).cx = 5;    % center x
-b(1).cz = 5;    % center z
+b(1).cz = 3;    % center z
 b(1).vx = 0;    % velocity x (change this for initial velocity)
 b(1).vz = 0;    % velocity z (change this for initial velocity)
 b(1).fx = 0;    % force x
