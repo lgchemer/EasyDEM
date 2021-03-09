@@ -28,8 +28,8 @@ b(1).r  = 1;
 b(1).m  = 4/3*pi*(b(1).r)^3*density;
 b(1).cx = 5;    % center x
 b(1).cz = 3;    % center z
-b(1).vx = 10;    % velocity x
-b(1).vz = 0;    % velocity z
+b(1).vx = 150;    % velocity x
+b(1).vz = 200;    % velocity z
 b(1).fx = 0;    % force x
 b(1).fz = 0;    % force z
 
@@ -64,7 +64,7 @@ axis equal
 % -------------------------------
 % Time integration (simulation)
 % -------------------------------
-% array_vz = zeros(1,sim_steps);
+
 array_cz = zeros(1,sim_steps);
 
 for i = 1:sim_steps
@@ -73,24 +73,43 @@ for i = 1:sim_steps
     %--------------------------------------------    
     % global force update
     b(1).fz = b(1).m * grav_acc;
+    b(1).fx = 0;
 
     % CONTACT FORCE update  
     % Check boundaries 
     % Assumption: the boundary is rectangle. If not rectangle, a more
     %             sophisticated method needs to be implemented.    
-    urn = (b(1).cz - b(1).r) - min(bndZ);
-    if urn < 0 
-        cnt_force = stiffness * urn;
-        b(1).fz = b(1).fz - cnt_force;
+    % bottom boundary
+    if (b(1).cz - b(1).r) < min(bndZ)
+        cnt_force = stiffness * (min(bndZ) - (b(1).cz - b(1).r));
+        b(1).fz = b(1).fz + cnt_force;
     end
     
+    % top boundary
+    if (b(1).cz + b(1).r) > max(bndZ)
+        cnt_force = stiffness * (max(bndZ) - (b(1).cz + b(1).r));
+        b(1).fz = b(1).fz + cnt_force;
+    end    
+    
+    % left boundary
+    if (b(1).cx - b(1).r) < min(bndX)
+        cnt_force = stiffness * (min(bndX) - (b(1).cx - b(1).r));
+        b(1).fx = b(1).fx + cnt_force;
+    end
+
+    % right boundary
+    if (b(1).cx + b(1).r) > max(bndX)
+        cnt_force = stiffness * (max(bndX) - (b(1).cx + b(1).r));
+        b(1).fx = b(1).fx + cnt_force;
+    end    
     
     %--------------------------------------------
     % particle motion update
     %--------------------------------------------
     % ball motion update
-    b(1).vz     = b(1).vz + b(1).fz/b(1).m*dt;
-    if (i==1) b(1).vz = b(1).vz/2; end % central time integration
+    b(1).vx     = b(1).vx + b(1).fx/b(1).m*dt;    
+    b(1).vz     = b(1).vz + b(1).fz/b(1).m*dt;    
+    b(1).cx     = b(1).cx + b(1).vx*dt;
     b(1).cz     = b(1).cz + b(1).vz*dt;
     array_cz(i) = b(1).cz;
     
