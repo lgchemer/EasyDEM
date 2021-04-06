@@ -17,7 +17,7 @@ close all
 grav_acc        = -981;          % 981 cm/s^2
 
 % user-input
-sim_duration    = 1;         % unit: second
+sim_duration    = 0.2;         % unit: second
 stiffness       = 1.3e5;       % 1.3e5 N/m = (kg*m/s^2)/m =(kg*cm/s^2)/cm 
 density         = 0.1;         % 0.1 g/cm^3 
 %--------------------------------------------
@@ -30,8 +30,8 @@ b(1).r  = 1;
 b(1).m  = 4/3*pi*b(1).r*b(1).r*b(1).r*density;
 b(1).cx = 5;    % center x
 b(1).cz = 3;    % center z
-b(1).vx = 100;    % velocity x (change this for initial velocity)
-b(1).vz = 150;    % velocity z (change this for initial velocity)
+b(1).vx = 0;    % velocity x (change this for initial velocity)
+b(1).vz = 0;    % velocity z (change this for initial velocity)
 b(1).fx = 0;    % force x
 b(1).fz = 0;    % force z
 
@@ -39,7 +39,7 @@ b(1).fz = 0;    % force z
 
 
 % compute the simulation step
-min_r   = min(b(:).r);    % minimum ball size (radius)
+min_r   = min(struct2table(b).r);    % minimum ball size (radius)
 dt      = 0.2 * sqrt(4/3*pi*min_r*min_r*min_r*density/stiffness); % time step size (unit: seconds)
 sim_steps = ceil(sim_duration / dt);
 

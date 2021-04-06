@@ -40,7 +40,7 @@ b(1).fz = 0;    % force z
 
 
 % compute the simulation step
-min_r   = min(b(:).r);    % minimum ball size (radius)
+min_r   = min(struct2table(b).r);    % minimum ball size (radius)
 dt      = 0.2 * sqrt(4/3*pi*min_r*min_r*min_r*density/stiffness); % time step size (unit: seconds)
 sim_steps = ceil(sim_duration / dt);
 
